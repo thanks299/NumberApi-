@@ -24,14 +24,15 @@ const isPerfect = (n) => {
 };
 
 const isArmstrong = (n) => {
-  const digits = String(n).split('');
+  const num = Math.abs(n); // Handle negative numbers
+  const digits = String(num).split('');
   const length = digits.length;
   const sum = digits.reduce((acc, digit) => acc + Math.pow(Number(digit), length), 0);
-  return sum === n;
+  return sum === num;
 };
 
 const getDigitSum = (n) => {
-  return String(n)
+  return String(Math.abs(n))
     .split('')
     .reduce((acc, digit) => acc + Number(digit), 0);
 };
@@ -52,7 +53,7 @@ app.get('/api/classify-number', async (req, res) => {
   // Input validation
   if (!number || !/^-?\d+$/.test(number)) {
     return res.status(400).json({
-      number: number || 'null',
+      number: number || "",
       error: true,
     });
   }
@@ -62,7 +63,7 @@ app.get('/api/classify-number', async (req, res) => {
   if (isArmstrong(num)) properties.push('armstrong');
   if (num % 2 === 0) properties.push('even');
   else properties.push('odd');
-
+  
   const funFact = await getFunFact(num);
 
   const response = {
